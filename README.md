@@ -21,8 +21,14 @@ Health Bar Interface: Design and integrate health bars for player and enemy char
 Game Timers and Game Over: Implement game timers to track the duration of each match and determine the game's outcome, signaling a game over condition upon completion.
 
 **Folder Structure**
+
+
 css
+
+
 Copy code
+
+
 mortal-fighting/
 │
 ├── css/
