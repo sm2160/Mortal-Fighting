@@ -1,11 +1,12 @@
-Mortal Fighting Game
+**Mortal Fighting Game**
 
-Overview
+**Overview**
 
 
 The "Mortal Fighting" project is an exciting endeavor aimed at coding a 2D fighting game using HTML, CSS, and JavaScript. Inspired by classic arcade-style fighting games, this project focuses on implementing basic fighting game mechanics while gradually evolving the gameplay experience through sprite-based animations, interactive interfaces, and dynamic elements.
 
-Key Features
+**Key Features**
+
 Basic Fighting Mechanics: The project begins with the implementation of fundamental fighting game mechanics, allowing players to control rectangular characters with simple attack and movement capabilities.
 Sprite Animation: As the project progresses, rectangular characters are transformed into dynamic sprites with fluid animations, including idle, running, jumping, attacking, and taking damage sequences.
 Interactive Backgrounds: In addition to character sprites, animated backgrounds are introduced to enhance the visual appeal and immersion of the game environment.
@@ -18,7 +19,8 @@ Character Movement: Implement event listeners to enable player control for chara
 Combat Mechanics: Introduce attack functionality, allowing characters to engage in combat by detecting collisions and triggering attack animations.
 Health Bar Interface: Design and integrate health bars for player and enemy characters, updating dynamically based on combat interactions and damage taken.
 Game Timers and Game Over: Implement game timers to track the duration of each match and determine the game's outcome, signaling a game over condition upon completion.
-Folder Structure
+
+**Folder Structure**
 css
 Copy code
 mortal-fighting/
@@ -36,10 +38,11 @@ mortal-fighting/
 │
 ├── index.html
 └── README.md
-Getting Started
+
+**Getting Started**
 To run the game locally, simply open the index.html file in a web browser that supports HTML5 canvas rendering. Ensure that JavaScript is enabled in your browser settings for optimal gameplay experience.
 
-Credits
+**Credits**
 Developed by Muhammed Samiul
 License
 This project is licensed under the MIT License - see the LICENSE file for details.
