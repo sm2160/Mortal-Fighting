@@ -1,5 +1,8 @@
 Mortal Fighting Game
+
 Overview
+
+
 The "Mortal Fighting" project is an exciting endeavor aimed at coding a 2D fighting game using HTML, CSS, and JavaScript. Inspired by classic arcade-style fighting games, this project focuses on implementing basic fighting game mechanics while gradually evolving the gameplay experience through sprite-based animations, interactive interfaces, and dynamic elements.
 
 Key Features
