@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            overflow: hidden; /* Hide overflowing content */
+        }
+
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1; /* Place the loading screen above other elements */
+            display: none; /* Initially hide the loading screen */
+        }
+
+        #loadingText {
+            color: white;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        #pauseMenu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #pauseContent {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #resumeButton,
+        #restartButton,
+        #exitButton {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #resumeButton:hover,
+        #restartButton:hover,
+        #exitButton:hover {
+            background-color: #45a049;
+        }
+
+        #pauseButton {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #pauseButton:hover {
+            background-color: #2980b9;
+        }
+
+        /* Additional styles for audio player and mute button */
+        #audioPlayer {
+            display: none;
+        }
+
+        #muteButton {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #muteButton:hover {
+            background-color: #c0392b;
+        }
+
+        #displayText {
+            position: absolute;
+            color: yellow;
+            font-family: monospace;
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow:
+                5px 0 0 black,
+                0 5px 0 black,
+                -5px 0 0 black,
+                0 -5px 0 black,
+                5px 5px 0 black,
+                -5px 5px 0 black,
+                5px -5px 0 black,
+                -5px -5px 0 black;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        /* Added Fullscreen button styling */
+        #fullscreenButton {
+            background-color: transparent;
+            border: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+    <title>Mortal Fighting</title>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div id="loadingText">Loading...</div>
+    </div>
+
+    <!-- red container div -->
+    <div style="position: relative; display: inline-block;">
+        <!-- smaller red container div -->
+        <div style="
+            position: absolute; 
+            display: flex; 
+            width: 100%; 
+            align-items: center;
+            padding: 20px;
+            "   
+        >
+            <!-- player health -->
+            <div style="
+                position: relative; 
+                width: 100%; 
+                display: flex; 
+                justify-content:flex-end;
+                border-top: 4px solid white;
+                border-bottom: 4px solid white;
+                border-left: 4px solid white;
+            ">
+                <div 
+                    style="background-color: black; height: 30px; width: 100%;"
+                ></div>
+                <div 
+                    id="playerHealth"
+                    style="
+                    position: absolute; 
+                    background: #22C55E; 
+                    top: 0; 
+                    right: 0; 
+                    bottom: 0; 
+                    width: 100%;
+                    "
+                ></div>
+            </div>
+            <!-- timer -->
+            <div 
+                id="timer"
+                style="
+                background-color: black; 
+                width: 100px; 
+                height: 60px; 
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                border: 4px solid white;
+                "
+            >
+                10  
+            </div>
+            <!-- enemy health -->
+            <div style="
+                position: relative; 
+                width: 100%;
+                border-top: 4px solid white;
+                border-bottom: 4px solid white;
+                border-right: 4px solid white;
+            ">
+                <div 
+                    style="background-color: black; height: 30px;"
+                ></div>
+                <div 
+                    id="enemyHealth"
+                    style="
+                    position: absolute; 
+                    background: #22C55E; 
+                    top: 0; 
+                    right: 0; 
+                    bottom: 0; 
+                    left: 0;
+                    "
+                ></div>
+            </div>
+        </div>
+        <!-- Display Text -->
+        <div id="displayText">
+            Draw
+        </div>
+
+        <!-- Canvas for your game -->
+        <canvas></canvas>
+
+        <!-- Fullscreen button -->
+        <button id="fullscreenButton" onclick="toggleFullscreen()">
+            <i class="bi bi-arrows-fullscreen" style="color: white; font-size: 30px;"></i>
+        </button>
+
+        <!-- Move the Pause Button to the bottom right corner -->
+        <div style="position: absolute; bottom: 10px; right: 10px;">
+            <button id="pauseButton" onclick="showPauseMenu()">Pause</button>
+        </div>
+
+        <!-- Sound player and mute button (moved to bottom left) -->
+        <div style="position: absolute; bottom: 10px; left: 10px;">
+            <audio id="audioPlayer" src="./soundtrack/main.mp3" controls loop autoplay style="display: none;"></audio>
+            <button id="muteButton" onclick="toggleMute()">Mute</button>
+        </div>
+    </div>
+
+    <!-- Pause Menu -->
+    <div id="pauseMenu">
+        <div id="pauseContent">
+            <h2>Game Paused</h2>
+            <!-- Add other pause menu elements as needed -->
+
+            <!-- Resume Button -->
+            <button id="resumeButton" onclick="hidePauseMenu()">Resume Game</button>
+            <!-- Restart Button -->
+            <button id="restartButton" onclick="restartGame()">Restart Game</button>
+            <!-- Exit Button -->
+            <button id="exitButton" onclick="exitGame()">Main Menu</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js" integrity="sha512-H6cPm97FAsgIKmlBA4s774vqoN24V5gSQL4yBTDOY2su2DeXZVhQPxFK4P6GPdnZqM9fg1G3cMv5wD7e6cFLZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="index.js"></script>
+
+    <!-- Script to set audio to start halfway through and adjust playback rate -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const audioPlayer = document.getElementById('audioPlayer');
+    
+            // Set the volume after the audio has loaded
+            audioPlayer.oncanplay = function () {
+                audioPlayer.volume = 0.1; // Adjust the volume 
+            };
+        });
+    </script>
+    
+    <script>
+        const playerHealthBar = document.getElementById('playerHealth');
+        const enemyHealthBar = document.getElementById('enemyHealth');
+
+        // Initial health values
+        let playerHealth = 100;
+        let enemyHealth = 100;
+
+        function updateHealthBars() {
+            // Light up the health bars by changing the background color when health is below a certain threshold
+            const threshold = 30;
+
+            if (playerHealth < threshold) {
+                // Flash animation using GSAP
+                gsap.to(playerHealthBar, { background: 'white', repeat: 1, yoyo: true, duration: 0.2 });
+            } else {
+                playerHealthBar.style.background = '#22C55E';
+            }
+
+            if (enemyHealth < threshold) {
+                // Flash animation using GSAP
+                gsap.to(enemyHealthBar, { background: 'white', repeat: 1, yoyo: true, duration: 0.2 });
+            } else {
+                enemyHealthBar.style.background = '#22C55E';
+            }
+        }
+
+        // Example function to decrease player health (you may have your own logic for this)
+        function decreasePlayerHealth() {
+            playerHealth -= 10; // Adjust the decrement as needed
+            updateHealthBars();
+        }
+
+        // Example function to decrease enemy health (you may have your own logic for this)
+        function decreaseEnemyHealth() {
+            enemyHealth -= 10; // Adjust the decrement as needed
+            updateHealthBars();
+        }
+
+        // Call this function wherever you want to update the health bars (e.g., after an attack)
+        updateHealthBars();
+
+        const pauseMenu = document.getElementById('pauseMenu');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const muteButton = document.getElementById('muteButton');
+
+        function showPauseMenu() {
+            pauseMenu.style.display = 'flex';
+        }
+
+        function hidePauseMenu() {
+            pauseMenu.style.display = 'none';
+        }
+
+        function restartGame() {
+            // Show loading screen
+            document.getElementById('loadingScreen').style.display = 'flex';
+
+            // Simulate loading time (you can replace this with your actual loading logic)
+            setTimeout(function () {
+                // Reload the page to restart the game
+                location.reload();
+            }, 2000); // Adjust the duration as needed
+        }
+
+        function toggleMute() {
+            if (audioPlayer.muted) {
+                audioPlayer.muted = false;
+                muteButton.innerText = 'Mute';
+            } else {
+                audioPlayer.muted = true;
+                muteButton.innerText = 'Unmute';
+            }
+        }
+
+        function exitGame() {
+            // Show loading screen
+            document.getElementById('loadingScreen').style.display = 'flex';
+
+            // Simulate loading time (you can replace this with your actual loading logic)
+            setTimeout(function () {
+                // Redirect to the main menu
+                window.location.href = 'welcome.html';
+            }, 2000); // Adjust the duration as needed
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                showPauseMenu();
+            }
+        });
+
+        function startGame() {
+            // Show loading screen
+            document.getElementById('loadingScreen').style.display = 'flex';
+
+            // Simulate loading time (you can replace this with your actual loading logic)
+            setTimeout(function () {
+                // Redirect to the game page after loading
+                window.location.href = 'index.html';
+            }, 2000); // Adjust the duration as needed
+        }
+
+        function toggleFullscreen() {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+
+</html>

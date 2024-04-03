@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            flex-direction: column;
+            overflow: hidden; /* Hide overflowing content */
+        }
+
+        #mainPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('./img/2DBackground_36.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: background-color 2s; /* Add a smooth transition effect on background color change */
+        }
+
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1; /* Place the loading screen above other elements */
+            display: none; /* Initially hide the loading screen */
+        }
+
+        #loadingText {
+            color: white;
+            font-size: 24px;
+            margin-top: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-align: center;
+            border-right: 0.15em solid white;
+            animation: typing 15s steps(40), blink-caret 0.2s;
+        }
+
+        @keyframes typing {
+            from, to {
+                width: 0;
+            }
+            50%, 100% {
+                width: 75%;
+            }
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: white;
+            }
+        }
+
+        #title {
+            font-size: 100px;
+            color: yellow;
+            margin-bottom: 10px;
+            margin-top: 0px;
+            text-shadow: 5px 0 0 black, 0 5px 0 black, -5px 0 0 black, 0 -5px 0 black, 5px 5px 0 black, -5px 5px 0 black, 5px -5px 0 black, -5px -5px 0 black;
+        }
+
+        #subtitle {
+            font-size: 50px;
+            color: yellow;
+            margin-bottom: 300px;
+            text-shadow: 5px 0 0 black, 0 5px 0 black, -5px 0 0 black, 0 -5px 0 black, 5px 5px 0 black, -5px 5px 0 black, 5px -5px 0 black, -5px -5px 0 black;
+        }
+
+        #muteButton {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        #muteButton:hover {
+            background-color: #c0392b;
+        }
+
+        #unmuteButton {
+            background-color: #2ecc71;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        #unmuteButton:hover {
+            background-color: #27ae60;
+        }
+
+        #playButton {
+            color: #fff;
+            padding: 20px 40px;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            background-color: #000; /* Set the initial background color to black */
+            animation: flash 2s infinite; /* Flash animation */
+        }
+
+        @keyframes flash {
+            0%, 100% {
+                background-color: #000; /* Background color is black */
+            }
+            50% {
+                background-color: transparent; /* Background color is transparent during the flash */
+            }
+        }
+
+        #settingsButton {
+            background-color: transparent;
+            border: none;
+            position: absolute;
+            top: 10px; /* Adjust the vertical position as needed */
+            right: 10px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #settingsButton:hover {
+            color: yellow; /* Change color on hover if desired */
+        }
+
+        #settingsMenu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #000;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        #controlsPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color:#000;
+            padding: 80px;
+            color: white;
+            text-align: center;
+        }
+
+        #controlsPopup p {
+            font-size: 18px;
+        }
+
+        #controlsPopup button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #controlsPopup button:hover {
+            background-color: #2980b9;
+        }
+
+        #fullscreenButton {
+            background-color: transparent;
+            border: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #fullscreenButton i {
+            color: white;
+            font-size: 20px;
+        }
+
+        #settingsButton i {
+            color: white;
+            font-size: 20px;
+        }
+
+        #settingsMenu button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #settingsMenu button:hover {
+            background-color: #2980b9;
+        }
+
+        #loadingScreen {
+            z-index: 1; /* Place the loading screen above other elements */
+            display: none; /* Initially hide the loading screen */
+        }
+
+        #loadingText {
+            color: white;
+            font-size: 24px;
+            margin-top: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-align: center;
+            border-right: 0.15em solid white;
+            animation: typing 15s steps(40), blink-caret 0.2s;
+        }
+
+        @keyframes typing {
+            from, to {
+                width: 0;
+            }
+            50%, 100% {
+                width: 75%;
+            }
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: white;
+            }
+        }
+    </style>
+    <title>Mortal Fighting</title>
+</head>
+
+<body>
+    <div id="mainPage">
+        <h1 id="title">Mortal</h1>
+        <h1 id="subtitle">Fighting</h1>
+        <button id="playButton" onclick="startGame()">Press Start</button>
+
+        <!-- Sound player and mute/unmute buttons (moved to bottom left) -->
+        <div style="position: absolute; bottom: 10px; left: 10px;">
+            <audio id="audioPlayer" src="./soundtrack/fight.mp3" loop></audio>
+            <button id="unmuteButton" onclick="toggleUnmute()">Unmute</button>
+            <button id="muteButton" onclick="toggleMute()" style="display: none;">Mute</button>
+        </div>
+
+        <!-- Fullscreen button (added to top right) -->
+        <div style="position: absolute; top: 10px; right: 10px;">
+            <button id="fullscreenButton" onclick="toggleFullscreen()">
+                <i class="bi bi-arrows-fullscreen"></i>
+            </button>
+        </div>
+
+        <!-- Settings button (added under the "Press Start" button) -->
+        <div style="position: absolute; top: 70px; right: 10px;">
+            <button id="settingsButton" onclick="showControls()">
+                <i class="bi bi-gear"></i>
+            </button>
+        </div>
+
+        <!-- Settings Menu (initially hidden) -->
+        <div id="settingsMenu">
+            <!-- Add other settings options as needed -->
+        </div>
+
+        <!-- Controls Popup (initially hidden) -->
+        <div id="controlsPopup">
+            <p>How To Play:</p>
+            <p>Use 'Left Arrow'  or 'Right Arrow' / 'A', 'D' keys to move.</p>
+            <p>Press 'Up Arrow' / 'W' to jump.</p>
+            <p>Press 'Down Arrow' / 'S' to attack.</p>
+            <button onclick="closeControlsPopup()">Close</button>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loadingScreen">
+            <div id="loadingText">Loading...</div>
+        </div>
+
+        <!-- Move the Pause Button to the bottom right corner -->
+        <div style="position: absolute; bottom: 10px; right: 10px; color: white; font-size: 12px; text-align: right;">
+            <p>&copy; 2024 Muhammed Samiul</p>
+            <p>All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        function startGame() {
+            // Change background to black
+            document.getElementById('mainPage').style.backgroundColor = '#000';
+
+            // Show loading screen
+            document.getElementById('loadingScreen').style.display = 'flex';
+
+            // Simulate shorter loading time (you can replace this with your actual loading logic)
+            setTimeout(function () {
+                // Redirect to the game page after loading
+                window.location.href = 'index.html';
+            }, 2000); // Adjust the duration as needed
+        }
+
+        function toggleMute() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const muteButton = document.getElementById('muteButton');
+            const unmuteButton = document.getElementById('unmuteButton');
+
+            audioPlayer.muted = !audioPlayer.muted;
+
+            if (audioPlayer.muted) {
+                muteButton.style.display = 'none';
+                unmuteButton.style.display = 'block';
+            } else {
+                muteButton.style.display = 'block';
+                unmuteButton.style.display = 'none';
+            }
+        }
+
+        function toggleUnmute() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const muteButton = document.getElementById('muteButton');
+            const unmuteButton = document.getElementById('unmuteButton');
+
+            audioPlayer.muted = false; // Unmute the audio
+
+            // Show the mute button and hide the unmute button
+            muteButton.style.display = 'block';
+            unmuteButton.style.display = 'none';
+
+            // Play the audio
+            audioPlayer.play().catch(function (error) {
+                console.error('Play failed:', error);
+            });
+        }
+
+        function toggleFullscreen() {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function showControls() {
+            const controlsPopup = document.getElementById('controlsPopup');
+            controlsPopup.style.display = 'block';
+        }
+
+        function closeControlsPopup() {
+            const controlsPopup = document.getElementById('controlsPopup');
+            controlsPopup.style.display = 'none';
+        }
+
+        // Function to set the volume level of the audio
+        function setVolume(volume) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.volume = volume;
+        }
+
+        // Call the setVolume function with the desired volume level
+        setVolume(0.1);
+
+        // Call the playAudio function when the page loads
+        window.addEventListener('load', function () {
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.pause(); // Pause audio initially
+        });
+    </script>
+</body>
+
+</html>
