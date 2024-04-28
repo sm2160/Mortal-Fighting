@@ -23,12 +23,6 @@ Game Timers and Game Over: Implement game timers to track the duration of each m
 **Folder Structure**
 
 
-css
-
-
-Copy code
-
-
 mortal-fighting/
 │
 ├── css/
@@ -46,7 +40,7 @@ mortal-fighting/
 └── README.md
 
 **Getting Started**
-To run the game locally, simply open the index.html file in a web browser that supports HTML5 canvas rendering. Ensure that JavaScript is enabled in your browser settings for optimal gameplay experience.
+To run the game locally, simply open the welcome.html file in a web browser that supports HTML5 canvas rendering. Ensure that JavaScript is enabled in your browser settings for optimal gameplay experience.
 
 **Credits**
 Developed by Muhammed Samiul
